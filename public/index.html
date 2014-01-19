@@ -1,0 +1,142 @@
+<!-- layout.ect -->
+<!DOCTYPE html>
+<html ng-app="ble-manager">
+<head>
+    <title>ble-manager</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <link rel="shortcut icon" type="image/x-ico" href="favicon.ico">
+
+    <link rel="stylesheet" media="screen" href="scripts/bower_components/select2/select2.css"/>
+    <link rel="stylesheet" media="screen" href="styles/styles.css">
+
+    <script src="scripts/bower_components/jquery/jquery.js"></script>
+    <script src="scripts/bower_components/select2/select2.js"></script>
+    <script src="scripts/bower_components/momentjs/moment.js"></script>
+    <script src="scripts/bower_components/underscore/underscore.js"></script>
+
+    <script src="scripts/bower_components/angular/angular.js"></script>
+    <script src="scripts/bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="scripts/bower_components/angular-resource/angular-resource.js"></script>
+    <script src="scripts/bower_components/angular-sanitize/angular-sanitize.js"></script>
+
+    <script src="scripts/app.js"></script>
+    <script src="scripts/auth.js"></script>
+    <script src="scripts/devices.js"></script>
+    <script src="scripts/notifications.js"></script>
+
+    <script src="scripts/scripts.js"></script>
+
+    <style>
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }
+    </style>
+</head>
+<body ng-controller="RootCtrl" ng-cloak>
+<header>
+    <div>
+        <nav id="menu">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li ng-repeat="menu in menus" ng-class="{active: selectedMenuItem.id == menu.id}" ng-show="Auth.hasRole('ROLE_USER')">
+                    <a ng-click="selectMenuItem(menu)" href="{{menu.url}}">{{menu.name}}</a>
+                </li>
+            </ul>
+        </nav>
+        <div id="user" ng-controller="UserDetailsCtrl">
+            <div id="user-details-loggedin" ng-show="Auth.isAuthenticated()">
+                <a href="/account">
+                    <img ng-src="{{Auth.user().avatarUrl}}" alt="{{Auth.user().firstName}}" width="40px" height="40px"/>
+                    <span>{{Auth.user().fullName}} <span>( {{Auth.user().email}} )</span></span>
+                </a> | <a href="/logout">Logout</a>
+                <div ng-show="Auth.isNotAuthenticated()">
+                    <span><a href="/login">Login</a></span>
+                </div>
+            </div>
+
+            <div id="user-details-login" ng-show="Auth.isNotAuthenticated()">
+                <span><a href="#/login">Login</a></span>
+            </div>
+        </div>
+    </div>
+    <div>
+        <nav id="submenu">
+            <ul>
+                <li ng-repeat="subMenu in selectedMenuItem.items">
+                    <a href="{{subMenu.url}}">{{subMenu.name}}</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<section id="main">
+    <aside id="sidebar" ng-controller="SubMenuCtrl" ng-show="groups.length > 0" ng-repeat="group in groups">
+        <section id="sb-actions">
+            <h1>Actions</h1>
+            <ul>
+                <li ng-repeat="action in actions">
+                    <a class="btn" href="{{url}}">{{message}}</a>
+                </li>
+            </ul>
+        </section>
+    </aside>
+
+    <section id="content" class="{{sidebar}}sidebar" ng-controller="ContentCtrl" ng-view>
+
+    </section>
+    <br style="clear: both;" />
+</section>
+<footer>
+    <ul>
+        <li>
+            <h1>Contact us</h1>
+            <section>
+                <ul id="contacts">
+                    <li>Mail: <a href="mailto:info@helyx.org">info@helyx.org</a></li>
+                </ul>
+            </section>
+        </li><!--
+             --><li>
+        <h1>Follow us</h1>
+
+        <section>
+            <ul id="websites">
+                <li>Twitter: <a href="http://twitter.com/alexiskinsella">@alexiskinsella</a></li>
+                <li>Blog: <a href="http://blog.helyx.org"> Helyx.org</a></li>
+            </ul>
+        </section>
+    </li><!--
+             --><li>
+        <h1>Contribute !</h1>
+
+        <section>
+            <div>
+                Github: <a href="https://github.com/akinsella/ble-manager">ble-manager project</a><br />
+            </div>
+        </section>
+    </li>
+    </ul>
+
+    <div id="copyright"> Copyright 2014 - <a href="http://blog.helyx.org">helyx.org</a></div>
+</footer>
+
+<script type="text/javascript">
+    /*
+     var _gaq = _gaq || [];
+     _gaq.push(['_setAccount', 'UA-1889791-25']);
+     _gaq.push(['_trackPageview']);
+
+     (function() {
+     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+     })();
+     */
+</script>
+
+</body>
+</html>
+

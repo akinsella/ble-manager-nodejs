@@ -1,0 +1,22 @@
+<h1>Create a notification</h1>
+{{#if createNotificationForm.hasErrors}}
+    <div class="alert-message error">
+        <p><strong>Oops</strong> Please fix all errors</p>
+        <ul>
+            {{#each}}
+                <li>{{this}}</li>
+            {{/each}}
+        </ul>
+    </div>
+{{/if}}
+<form id="createNotificationForm" action="/devices" method="post">
+    <h1>General informations</h1>
+    <fieldset>
+        <label for="message">Message:</label>
+        <input id="message" type="text" />
+    </fieldset>
+    <div class="actions">
+        <a href="#/notifications" class="button">Cancel</a>
+        <input type="submit" class="button primary" value="Insert" />
+    </div>
+</form>

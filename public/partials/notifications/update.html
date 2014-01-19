@@ -1,0 +1,24 @@
+<h1>Update a notification</h1>
+{{#if updateNotificationForm.hasErrors}}
+    <div class="alert-message error">
+        <p><strong>Oops</strong> Please fix all errors</p>
+        <ul>
+            {{#each}}
+                <li>{{this}}</li>
+            {{/each}}
+        </ul>
+    </div>
+{{/if}}
+<form id="updateNotificationForm" action="/notifications/{{id}}" method="put">
+    <h1>General informations</h1>
+    <fieldset>
+        <label for="udid">Udid:</label>
+        <input id="udid" type="text" />
+        <label for="token">Token:</label>
+        <input id="token" type="text" />
+    </fieldset>
+    <div class="actions">
+        <a href="#/notifications" class="button">Cancel</a>
+        <input type="submit" class="button primary" value="Insert" />
+    </div>
+</form>

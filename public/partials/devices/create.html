@@ -1,0 +1,24 @@
+<h1>Create a device</h1>
+{{#if updateDeviceForm.hasErrors}}
+    <div class="alert-message error">
+        <p><strong>Oops</strong> Please fix all errors</p>
+        <ul>
+            {{#each}}
+                <li>{{this}}</li>
+            {{/each}}
+        </ul>
+    </div>
+{{/if}}
+<form id="updateDeviceForm" action="/devices" method="post">
+    <h1>General informations</h1>
+    <fieldset>
+        <label for="udid">Udid:</label>
+        <input id="udid" type="text" />
+        <label for="token">Token:</label>
+        <input id="token" type="text" />
+    </fieldset>
+    <div class="actions">
+        <a href="#/devices" class="button">Cancel</a>
+        <input type="submit" class="button primary" value="Insert" />
+    </div>
+</form>
