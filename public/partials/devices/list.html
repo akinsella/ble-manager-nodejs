@@ -3,7 +3,7 @@
         <h1>Devices</h1>
     </div>
     <div id="content-header-actions">
-        <span class="btn" ng-click="createDevice()">Discover</span>
+        <span class="btn" ng-click="discoverDevices()" ng-hide="loading">Discover</span>
     </div>
 </div>
 
@@ -20,16 +20,15 @@
     </tr>
     </thead>
     <tbody>
-    <tr  ng-repeat="device in devices">
-        <td>{{device.id}}</td>
-        <td>{{device.uuid}}</td>
+    <tr ng-repeat="device in devices">
+        <td class="id"><a href="#/devices/{{device.id}}">{{device.id}}</a></td>
+        <td><a href="#/devices/{{device.id}}">{{device.uuid}}</a></td>
         <td>{{device.advertisement.localName}}</td>
         <td>{{device.advertisement.txPowerLevel}}</td>
         <td>{{device.advertisement.manufacturerData}}</td>
         <td>{{device.rssi}}</td>
-        <td>
-            <a href="#/devices/{{device.id}}/updateForm">Edit</a> -
-            <a href="#/devices/{{device.id}}/delete">Delete</a>
+        <td class="actions">
+            <a ng-click="deleteDevice(device);">Delete</a>
         </td>
     </tr>
     </tbody>

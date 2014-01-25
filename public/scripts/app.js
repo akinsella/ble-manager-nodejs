@@ -20,6 +20,8 @@
 				.when('/devices', { templateUrl: 'partials/devices/list.html', controller: 'DevicesCtrl' })
 				.when('/devices/create', { templateUrl: 'partials/devices/create.html', controller: 'DevicesCtrl' })
 				.when('/devices/update', { templateUrl: 'partials/devices/update.html', controller: 'DevicesCtrl' })
+				.when('/devices/discover', { templateUrl: 'partials/devices/discover.html', controller: 'DevicesCtrl' })
+				.when('/devices/:id', { templateUrl: 'partials/devices/device.html', controller: 'DeviceCtrl' })
 				.otherwise({ redirectTo: '/' });
 			return $httpProvider.responseInterceptors.push('errorHttpInterceptor');
 		}])

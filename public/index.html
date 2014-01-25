@@ -50,7 +50,7 @@
             <div id="user-details-loggedin" ng-show="Auth.isAuthenticated()">
                 <a href="/account">
                     <img ng-src="{{Auth.user().avatarUrl}}" alt="{{Auth.user().firstName}}" width="40px" height="40px"/>
-                    <span>{{Auth.user().fullName}} <span>( {{Auth.user().email}} )</span></span>
+                    <span>{{Auth.user().fullName}}<span>( {{Auth.user().email}} )</span></span>
                 </a> | <a href="/logout">Logout</a>
                 <div ng-show="Auth.isNotAuthenticated()">
                     <span><a href="/login">Login</a></span>
@@ -114,7 +114,7 @@
 
         <section>
             <div>
-                Github: <a href="https://github.com/akinsella/ble-manager">ble-manager project</a><br />
+                Github: <a href="https://github.com/akinsella/">ble-manager project</a><br />
             </div>
         </section>
     </li>

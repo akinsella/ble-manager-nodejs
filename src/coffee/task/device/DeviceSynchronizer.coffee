@@ -33,7 +33,6 @@ class DeviceSynchronizer extends DataSynchronizer
 			items = @itemTransformer(data)
 			async.map items, @synchronizeItem, callback
 
-
 	synchronizeItem: (item, callback) =>
 		@modelClass().findOne @query(item), (err, itemFound) =>
 			if err
@@ -41,13 +40,12 @@ class DeviceSynchronizer extends DataSynchronizer
 			else if itemFound
 				if utils.isNotSame(item, itemFound, @compareFields())
 					@modelClass().update @query(item), @updatedData(item), (err, numberAffected, raw) ->
-						callback err, itemFound?.id
+						callback err, item
 				else
-					callback err, itemFound.id
+					callback err, itemFound
 			else
 				@createStorableItem(item).save (err) =>
 					logger.info("New #{@name} synchronized: #{@itemDescription(item)}")
-					callback err, item.id
-
+					callback err, item
 
 module.exports = DeviceSynchronizer

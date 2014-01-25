@@ -1,0 +1,101 @@
+<div id="content-header">
+    <div id="content-header-title">
+        <h1>{{device.advertisement.localName}}</h1>
+    </div>
+</div>
+
+<div id="content-body">
+
+    <h1>General Informations</h1>
+
+    <table class="dataset keyvalue">
+        <tbody>
+        <tr>
+            <td>Identifier</td>
+            <td>{{device.id}}</td>
+        </tr>
+        <tr>
+            <td>UUID</td>
+            <td>{{device.uuid}}</td>
+        </tr>
+        <tr>
+            <td>RSSI</td>
+            <td>{{device.rssi}}</td>
+        </tr>
+        <tr>
+            <td>Created At</td>
+            <td>{{reformatDate(device.createAt)}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div id="advertisement-data" ng-show="device.advertisement">
+        <h2>Advertisement Informations</h2>
+
+        <table class="dataset keyvalue">
+            <tbody>
+            <tr>
+                <td>Local name</td>
+                <td>{{device.advertisement.localName}}</td>
+            </tr>
+            <tr>
+                <td>Tx Power Level</td>
+                <td>{{device.advertisement.txPowerLevel}}</td>
+            </tr>
+            <tr>
+                <td>Manufacturer Data</td>
+                <td>{{device.advertisement.manufacturerData}}</td>
+            </tr>
+            <tr>
+                <td>Service Data</td>
+                <td>{{device.advertisement.serviceData}}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div id="beacon-data" ng-show="device.advertisement.beaconData">
+            <h3>iBeacon Informations</h3>
+
+            <table class="dataset keyvalue">
+                <tbody>
+                <tr>
+                    <td>Major</td>
+                    <td>{{device.beaconData.major}}</td>
+                </tr>
+                <tr>
+                    <td>Minor</td>
+                    <td>{{device.beaconData.major}}</td>
+                </tr>
+                <tr>
+                    <td>Measured Power</td>
+                    <td>{{device.beaconData.measuredPower}}</td>
+                </tr>
+                <tr>
+                    <td>Accuracy</td>
+                    <td>{{device.beaconData.accuracy}}</td>
+                </tr>
+                <tr>
+                    <td>Proximity</td>
+                    <td>{{device.beaconData.proximity}}</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div id="service-uuids" ng-show="device.advertisement.serviceUuids">
+            <h2>Service UUIDs</h2>
+
+            <table class="dataset keyvalue">
+                <tbody>
+                <tr ng-repeat="serviceUuid in device.advertisement.serviceUuids">
+                    <td>{{serviceUuid}}</td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>

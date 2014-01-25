@@ -4,10 +4,9 @@ pureautoinc  = require 'mongoose-pureautoinc'
 
 Device = new mongo.Schema(
 	id: Number,
-	name: {type: String, "default": '', trim: true}
 	uuid: {type: String, "default": '', trim: true}
-	model: {type: String, "default": '', trim: true}
-	advertisement:{
+	rssi: Number
+	advertisement: {
 		localName: {type: String, "default": '', trim: true}
 		txPowerLevel: {type: String, "default": '', trim: true}
 		manufacturerData: {type: String, "default": '', trim: true }
@@ -15,8 +14,15 @@ Device = new mongo.Schema(
 		serviceUuids: [
 			uuid: {type: String, "default": '', trim: true}
 		]
+		beaconData: {
+			major: Number
+			minor: Number
+			measuredPower: Number
+			accuracy: Number
+			proximity: {type: String, "default": '', trim: true}
+
+		}
 	}
-	rssi: Number
 	createAt: { type: Date, "default": Date.now },
 	lastModified: { type: Date, "default": Date.now }
 )

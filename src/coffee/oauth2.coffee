@@ -50,7 +50,6 @@ server.grant oauth2orize.grant.code((client, redirectURI, user, ares, done) ->
 	db.authorizationCodes.save code, client.id, redirectURI, user.id, (err) ->
 		return done(err)  if err
 		done null, code
-
 )
 
 # Exchange authorization codes for access tokens.  The callback accepts the
@@ -67,8 +66,6 @@ server.exchange oauth2orize.exchange.code((client, code, redirectURI, done) ->
 		db.accessTokens.save token, authCode.userID, authCode.clientID, (err) ->
 			return done(err)  if err
 			done null, token
-
-
 )
 
 # user authorization endpoint

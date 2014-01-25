@@ -34,7 +34,6 @@ utils = require './lib/utils'
 
 security = require './lib/security'
 
-api = require './route/api'
 auth = require './route/auth'
 client = require './route/client'
 user = require './route/user'
@@ -133,8 +132,6 @@ app.configure 'development', () ->
 app.configure 'production', () ->
 	app.use express.errorHandler()
 
-app.get "/api/info", api.informations
-
 #app.get "/users/me", passport.authenticate("bearer", session: false), user.me
 app.get "/users/me", security.ensureAuthenticated, user.me
 
@@ -145,15 +142,15 @@ app.get '/logout', auth.logout
 app.get '/auth/google', passport.authenticate('google', { failureRedirect: '/#/login' })
 app.get '/auth/google/callback', passport.authenticate('google', { failureRedirect: '/#/login' }), auth.authGoogleCallback
 
-app.delete "/devices/:id", security.ensureAuthenticated, device.removeById
-app.post "/devices", security.ensureAuthenticated, device.create
 app.get "/devices", security.ensureAuthenticated, device.list
+app.get "/devices/discover", security.ensureAuthenticated, device.discover
 app.get "/devices/:id", security.ensureAuthenticated, device.findById
+app.delete "/devices/:id", security.ensureAuthenticated, device.removeById
 
-app.delete "/clients/:id", security.ensureAuthenticated, client.removeById
 app.post "/clients", security.ensureAuthenticated, client.create
 app.get "/clients", security.ensureAuthenticated, client.list
 app.get "/clients/:id", security.ensureAuthenticated, client.findById
+app.delete "/clients/:id", security.ensureAuthenticated, client.removeById
 
 app.post "/users", security.ensureAuthenticated, user.create
 app.get "/users", security.ensureAuthenticated, user.list
@@ -161,12 +158,11 @@ app.get "/users/me", security.ensureAuthenticated, user.me
 app.get "/users/:id", security.ensureAuthenticated, user.findById
 app.delete "/users/:id", security.ensureAuthenticated, user.removeById
 
-app.delete "/notifications", security.ensureAuthenticated, notification.removeById
 app.post "/notifications", security.ensureAuthenticated, notification.create
 app.get "/notifications", security.ensureAuthenticated, notification.list
 app.get "/notifications/:id/push", security.ensureAuthenticated, notification.push
 app.get "/notifications/:id", security.ensureAuthenticated, notification.findById
-
+app.delete "/notifications/:id", security.ensureAuthenticated, notification.removeById
 
 httpServer = app.listen app.get('port')
 
