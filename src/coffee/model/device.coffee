@@ -35,6 +35,7 @@ Device = new mongo.Schema(
 				descriptors: [{
 					uuid: {type: String, "default": '', trim: true}
 					name: {type: String, "default": '', trim: true}
+					type: {type: String, "default": '', trim: true}
 				}]
 			}]
 		}]
