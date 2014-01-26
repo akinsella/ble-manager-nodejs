@@ -1,12 +1,13 @@
 logger = require 'winston'
 _ = require('underscore')._
 util = require 'util'
+noble = require 'noble'
+Q = require 'q'
+async = require 'async'
 
 utils = require '../../lib/utils'
 Device = require "../../model/device"
 DeviceSynchronizer = require './DeviceSynchronizer'
-noble = require 'noble'
-Q = require 'q'
 
 EXPECTED_MANUFACTURER_DATA_LENGTH = 25;
 APPLE_COMPANY_IDENTIFIER = 0x004c; # https://www.bluetooth.org/en-us/specification/assigned-numbers/company-identifiers
@@ -38,6 +39,7 @@ class DeviceDiscoverySynchronizer extends DeviceSynchronizer
 					serviceData: peripheral.advertisement.serviceData
 					serviceUuids: peripheral.advertisement.serviceUuids.map (serviceUuid) ->
 						uuid: serviceUuid
+					services: peripheral.advertisement.services
 				rssi: peripheral.rssi
 			)
 
@@ -103,23 +105,94 @@ class DeviceDiscoverySynchronizer extends DeviceSynchronizer
 	modelClass: () ->
 		Device
 
-	synchronizer : (params, callback) =>
+	synchronizer: (params, callback) =>
 		if scanning
 			callback new Error('Already scanning')
 
+		console.log("Starting scanning with Noble")
 		noble.startScanning([], false)
-		@discoverDevices (err, results) ->
+		@discoverPeripherals (err, peripherals) ->
+			console.log("Stopping scanning with Noble")
 			noble.stopScanning()
-			callback(err, results)
+			callback(err, peripherals)
 			scanning = false
 
-	discoverDevices : (callback) ->
+	discoverPeripherals: (callback) =>
 		peripherals = []
-		noble.on 'discover', (peripheral) ->
-			console.log("peripheral with UUID #{peripheral.uuid} found")
-			peripherals.push(peripheral)
+		noble.on 'discover', (peripheral) =>
+			console.log("Discovered peripheral with UUID #{peripheral.uuid} found")
+			peripherals.push Q.nfcall(@processPeripheral, peripheral)
+
 		setTimeout () ->
-			callback(undefined, peripherals)
+			Q.all(peripherals)
+				.then (peripherals) ->
+					callback(undefined, peripherals)
+				.fail (err) ->
+					callback(err)
+				.done()
 		, @timeout
+
+
+	processPeripheral: (peripheral, callback) =>
+		console.log("Processing peripheral with UUID #{peripheral.uuid} found")
+		console.log("Connecting to peripheral with UUID #{peripheral.uuid} found")
+		peripheral.connect (err) =>
+			if err
+				callback(err)
+			else
+				@discoverServices peripheral, (err, services) =>
+					if err
+						console.log("Disconnecting from peripheral with UUID #{peripheral.uuid} found")
+						peripheral.disconnect()
+						callback(err)
+					else
+						peripheral.advertisement.services = services
+						console.log("Disconnecting from peripheral with UUID #{peripheral.uuid} found")
+						peripheral.disconnect()
+						callback(undefined, peripheral)
+
+	discoverServices: (peripheral, callback) =>
+		peripheral.discoverServices [], (err, services) =>
+			if err
+				callback(err)
+			else
+				async.mapSeries(services, @processService, callback)
+
+	processService: (service, callback) =>
+		console.log "Service[#{service.uuid}] = #{service.name}"
+		@discoverCharacteristics service, (err, characteristics) =>
+			if err
+				callback(err)
+			else
+				service.characteristics = characteristics
+				callback(undefined, service)
+
+	discoverCharacteristics: (service, callback) =>
+		service.discoverCharacteristics [], (err, characteristics) =>
+			if err
+				callback(err)
+			else
+				async.mapSeries(characteristics, @processCharacteristic, callback)
+
+	processCharacteristic: (characteristic, callback) =>
+		console.log "Characteristic[#{characteristic.uuid}] name = #{characteristic.name}, type = #{characteristic.type}, properties = #{characteristic.properties}"
+		@discoverDescriptors characteristic, (err, descriptors) =>
+			if err
+				callback(err)
+			else
+				characteristic.descriptors = descriptors
+				callback(undefined, characteristic)
+
+	discoverDescriptors: (characteristic, callback) =>
+		characteristic.discoverDescriptors (err, descriptors) =>
+			if err
+				callback(err)
+			else
+				async.mapSeries(descriptors, @processDescriptor, callback)
+
+	processDescriptor: (@descriptor, callback) =>
+		console.log "Descriptor[#{descriptor.uuid}] name = #{descriptor.name}, type = #{descriptor.type}"
+		callback(undefined, descriptor)
+
 
 module.exports = DeviceDiscoverySynchronizer

@@ -84,17 +84,40 @@
         </div>
 
         <div id="service-uuids" ng-show="device.advertisement.serviceUuids">
-            <h2>Service UUIDs</h2>
+            <h3>Service UUIDs</h3>
 
             <table class="dataset keyvalue">
                 <tbody>
                 <tr ng-repeat="serviceUuid in device.advertisement.serviceUuids">
                     <td>{{serviceUuid}}</td>
-                    <td></td>
                 </tr>
                 </tbody>
             </table>
         </div>
+
+
+        <div id="services" ng-show="device.advertisement.services">
+            <h3>iBeacon Informations</h3>
+
+            <table class="dataset keyvalue">
+                <thead>
+                <tr>
+                    <th>uuid</th>
+                    <th>name</th>
+                    <th>type</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="service in device.advertisement.services">
+                    <td>{{service.uuid}}</td>
+                    <td>{{service.name}}</td>
+                    <td>{{service.type}}</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
 
     </div>
 
