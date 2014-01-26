@@ -109,7 +109,7 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="service in device.advertisement.services">
-                    <td><a href="" ng-click="scrollTo('#service-{{service.uuid}}')" target="_self">{{service.uuid}}</a></td>
+                    <td><a scroll-to='#service-{{service.uuid}}'>{{service.uuid}}</a></td>
                     <td>{{service.name}}</td>
                     <td>{{service.type}}</td>
                 </tr>
