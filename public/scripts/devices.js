@@ -92,6 +92,8 @@
 			    return moment(date, "YYYY-MM-DDTHH:mm:ss.Z").format("YYYY-MM-DD HH:mm:ss")
 		    };
 
+            $scope.tabSelected = 'general';
+
 		    $scope.deviceId = $routeParams.id;
 			$scope.fetchDevice();
 		}]);

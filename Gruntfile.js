@@ -161,10 +161,14 @@ module.exports = function(grunt) {
 				files:['test/data/**/*.*'],
 				tasks: ['copy:test']
 			},
-			public_dev: {
-				files:['public/**/*.*', 'src/sass/**/*.*'],
-				tasks: ['copy:public', 'sass:dev']
-			}
+            public_dev: {
+                files:['public/**/*.*'],
+                tasks: ['copy:public']
+            },
+            sass_dev: {
+                files:['src/sass/**/*.*'],
+                tasks: ['sass:dev']
+            }
 		},
 		shell: {                                // Task
 			cover: {                            // Target
