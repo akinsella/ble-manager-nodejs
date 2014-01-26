@@ -85,11 +85,15 @@
 		    };
 
 		    $scope.scrollTo = function(id) {
+			    console.log("Scroll to : ", id);
 			    $location.hash(id);
 			    $anchorScroll();
 		    };
 
 		    $scope.reformatDate = function(date) {
+			    if (!date) {
+				    return undefined;
+			    }
 			    console.log("Date to reformat: ", date);
 			    return moment(date, "YYYY-MM-DDTHH:mm:ss.Z").format("YYYY-MM-DD HH:mm:ss")
 		    };
