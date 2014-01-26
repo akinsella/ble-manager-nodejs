@@ -72,7 +72,7 @@
 	    }])
 
 		/* Controllers */
-		.controller('DeviceCtrl', ['$scope', '$routeParams', 'DeviceData', function ($scope, $routeParams, DeviceData) {
+		.controller('DeviceCtrl', ['$scope', '$location', '$anchorScroll', '$routeParams', 'DeviceData', function ($scope, $location, $anchorScroll, $routeParams, DeviceData) {
 			console.log("Device Controller");
 
 		    $scope.fetchDevice = function() {
@@ -84,7 +84,13 @@
 			    });
 		    };
 
+		    $scope.scrollTo = function(id) {
+			    $location.hash(id);
+			    $anchorScroll();
+		    };
+
 		    $scope.reformatDate = function(date) {
+			    console.log("Date to reformat: ", date);
 			    return moment(date, "YYYY-MM-DDTHH:mm:ss.Z").format("YYYY-MM-DD HH:mm:ss")
 		    };
 

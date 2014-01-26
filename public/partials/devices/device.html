@@ -97,7 +97,7 @@
 
 
         <div id="services" ng-show="device.advertisement.services">
-            <h3>iBeacon Informations</h3>
+            <h3>Services Informations</h3>
 
             <table class="dataset keyvalue">
                 <thead>
@@ -109,15 +109,62 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="service in device.advertisement.services">
-                    <td>{{service.uuid}}</td>
+                    <td><a href="" ng-click="scrollTo('#service-{{service.uuid}}')" target="_self">{{service.uuid}}</a></td>
                     <td>{{service.name}}</td>
                     <td>{{service.type}}</td>
                 </tr>
                 </tbody>
             </table>
 
-        </div>
+            <div id="service-{{uuid}}" ng-repeat="service in device.advertisement.services">
+                <h3>Service with {{service.uuid}} Informations</h3>
 
+                <table class="dataset keyvalue">
+                    <thead>
+                    <tr>
+                        <th>uuid</th>
+                        <th>name</th>
+                        <th>type</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="service in device.advertisement.services">
+                        <td>{{service.uuid}}</td>
+                        <td>{{service.name}}</td>
+                        <td>{{service.type}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <h4>Characteristics</h4>
+
+                <div id="service-{{uuid}}-characteristics" ng-repeat="characteristic in service.characteristics">
+                    <table class="dataset keyvalue">
+                        <thead>
+                        <tr>
+                            <th>uuid</th>
+                            <th>name</th>
+                            <th>type</th>
+                            <th>properties</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="service in device.advertisement.services">
+                            <td>{{service.uuid}}</td>
+                            <td>{{service.name}}</td>
+                            <td style="text-align: right;">{{service.type}}</td>
+                            <td>
+                                <ul>
+                                    <li ng-repeat="property in characteristic.properties">{{property}}</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
 
     </div>
 
