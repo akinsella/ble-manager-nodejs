@@ -269,7 +269,7 @@ section#content {
 
     margin-left: 10px;
 
-    h1, h2, h3 {
+    h1, h2, h3, h4 {
       color: #444;
       font-weight: bold;
       padding: 30px 5px 5px 10px;
@@ -281,6 +281,10 @@ section#content {
 
     h3 {
       padding-top: 10px;
+    }
+
+    h4 {
+      padding-top: 5px;
     }
 
   }

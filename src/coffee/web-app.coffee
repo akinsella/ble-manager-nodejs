@@ -20,7 +20,7 @@ util = require 'util'
 express = require 'express'
 
 device = require './route/device'
-notification = require './route/notification'
+# notification = require './route/notification'
 
 MongoStore = require('connect-mongo')(express)
 mongo = require './lib/mongo'
@@ -158,11 +158,11 @@ app.get "/users/me", security.ensureAuthenticated, user.me
 app.get "/users/:id", security.ensureAuthenticated, user.findById
 app.delete "/users/:id", security.ensureAuthenticated, user.removeById
 
-app.post "/notifications", security.ensureAuthenticated, notification.create
-app.get "/notifications", security.ensureAuthenticated, notification.list
-app.get "/notifications/:id/push", security.ensureAuthenticated, notification.push
-app.get "/notifications/:id", security.ensureAuthenticated, notification.findById
-app.delete "/notifications/:id", security.ensureAuthenticated, notification.removeById
+#app.post "/notifications", security.ensureAuthenticated, notification.create
+#app.get "/notifications", security.ensureAuthenticated, notification.list
+#app.get "/notifications/:id/push", security.ensureAuthenticated, notification.push
+#app.get "/notifications/:id", security.ensureAuthenticated, notification.findById
+#app.delete "/notifications/:id", security.ensureAuthenticated, notification.removeById
 
 httpServer = app.listen app.get('port')
 
