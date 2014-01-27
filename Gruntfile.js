@@ -162,7 +162,17 @@ module.exports = function(grunt) {
 				tasks: ['copy:test']
 			},
             public_dev: {
-                files:['public/**/*.*'],
+                files:[
+	                'public/errors/**/*.*',
+	                'public/images/**/*.*',
+	                'public/partials/**/*.*',
+	                'public/scripts/libs/**/*.*',
+	                'public/scripts/*.*',
+	                'public/*.*'
+                ],
+	            options: {
+		            spawn: false
+	            },
                 tasks: ['copy:public']
             },
             sass_dev: {
@@ -229,12 +239,20 @@ module.exports = function(grunt) {
 			config.dev.src = path.relative(config.dev.cwd, filepath);
 			grunt.config("coffee", config);
 		}
-		if (target === 'coffee_test') {
+		else if (target === 'coffee_test') {
 			config = grunt.config( "coffee" );
 
 			// Update the files.src to be the path to the modified file (relative to srcDir).
 			config.test.src = path.relative(config.test.cwd, filepath);
 			grunt.config("coffee", config);
+		}
+		else if (target === 'public_dev') {
+			config = grunt.config( "copy" );
+
+			// Update the files.src to be the path to the modified file (relative to srcDir).
+			config['public'].files[0].src = [path.relative(config['public'].files[0].cwd, filepath)];
+			grunt.log.writeln("Config copy: " + JSON.stringify(config['public']));
+			grunt.config("copy", config);
 		}
 	} );
 
