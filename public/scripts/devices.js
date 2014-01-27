@@ -72,16 +72,22 @@
 	    }])
 
 		/* Controllers */
-		.controller('DeviceCtrl', ['$scope', '$location', '$anchorScroll', '$routeParams', 'DeviceData', function ($scope, $location, $anchorScroll, $routeParams, DeviceData) {
+		.controller('DeviceCtrl', ['$scope', '$rootScope', '$location', '$anchorScroll', '$route', '$routeParams', 'DeviceData', function ($scope, $rootScope, $location, $anchorScroll, $route, $routeParams, DeviceData) {
 			console.log("Device Controller");
+
+		    $scope.tabSelected = $route.current.tab == 'general' ? 'general' : 'services';
+		    $scope.deviceId = $routeParams.id;
 
 		    $scope.fetchDevice = function() {
 			    console.log("Fetching device with id '" + $scope.deviceId + "' started");
-			    DeviceData.deviceWithId($scope.deviceId).success(function(data, status, headers, config) {
-				    console.log("Fetching Ddevice ended");
-				    $scope.device = data;
-				    console.log("Devices", data);
-			    });
+			    DeviceData.deviceWithId($scope.deviceId)
+				    .success(function(device, status, headers, config) {
+					    console.log("Fetching Ddevice ended");
+					    $scope.device = device;
+					    console.log("Device", device);
+					    $scope.selectService(device.advertisement.services[0]);
+					    $scope.computeBreadcrum();
+				    });
 		    };
 
 		    $scope.reformatDate = function(date) {
@@ -92,10 +98,38 @@
 			    return moment(date, "YYYY-MM-DDTHH:mm:ss.Z").format("YYYY-MM-DD HH:mm:ss")
 		    };
 
-            $scope.tabSelected = 'general';
+		    $scope.selectService = function (service) {
+			    $scope.selectedService = service;
+			    $scope.selectCharacteristic(service.characteristics[0]);
+			    console.log("Selected service: ", service.uuid);
+			    $scope.computeBreadcrum();
+		    };
 
-		    $scope.deviceId = $routeParams.id;
-			$scope.fetchDevice();
+		    $scope.selectCharacteristic = function (characteristic) {
+			    $scope.selectedCharacteristic = characteristic;
+			    console.log("Selected characteristic: ", characteristic.uuid);
+			    $scope.computeBreadcrum();
+		    };
+
+		    $scope.computeBreadcrum = function () {
+				$rootScope.breadcrum = [
+					{ label: 'Devices', url: '/devices' },
+					{ label: $scope.device.advertisement.localName || $scope.device.uuid, url: '/devices/' + $scope.device.id },
+					{ label: $scope.tabSelected == 'general' ? 'General' : 'Services', url: '/devices/' + $scope.device.id + '/' + $scope.tabSelected }
+				];
+
+			    if ($scope.tabSelected == 'services') {
+				    [
+					    { label: $scope.selectedService.uuid + ' - ' + $scope.selectedService.name || $scope.selectedService.uuid, url: '/devices/' + $scope.device.id },
+					    { label: $scope.selectedCharacteristic.uuid + ' - ' + $scope.selectedCharacteristic.name || $scope.selectedCharacteristic.uuid, url: '/devices/' + $scope.device.id }
+				    ].forEach(function(breadcrumItem) {
+						$rootScope.breadcrum.push(breadcrumItem);
+					});
+			    }
+		    };
+
+		    $scope.fetchDevice();
+
 		}]);
 
 })();

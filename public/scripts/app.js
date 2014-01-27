@@ -8,7 +8,7 @@
         .directive("scrollTo", ["$window", function($window){
             return {
                 restrict : "AC",
-                compile : function(){
+                compile : function() {
 
                     var document = $window.document;
 
@@ -40,7 +40,20 @@
             };
         }]);
 
-	angular.module('ble-manager', ['ngScrollTo'])
+	angular.module("ngLink",[])
+		.directive('link', ['$location', function($location) {
+			return {
+				link: function(scope, element, attrs) {
+					element.bind('click', function() {
+						scope.$apply(function() {
+							$location.path(attrs.link);
+						});
+					});
+				}
+			}
+		}]);
+
+	angular.module('ble-manager', ['ngScrollTo', 'ngLink'])
 
 		/* Config */
 
@@ -56,11 +69,15 @@
 				.when('/devices/create', { templateUrl: 'partials/devices/create.html', controller: 'DevicesCtrl' })
 				.when('/devices/update', { templateUrl: 'partials/devices/update.html', controller: 'DevicesCtrl' })
 				.when('/devices/discover', { templateUrl: 'partials/devices/discover.html', controller: 'DevicesCtrl' })
-				.when('/devices/:id', { templateUrl: 'partials/devices/device.html', controller: 'DeviceCtrl' })
+				.when('/devices/:id', { templateUrl: 'partials/devices/device.html', controller: 'DeviceCtrl', tab: 'general' })
+				.when('/devices/:id/general', { templateUrl: 'partials/devices/device.html', controller: 'DeviceCtrl', tab: 'general' })
+				.when('/devices/:id/services', { templateUrl: 'partials/devices/device.html', controller: 'DeviceCtrl', tab: 'services' })
 				.otherwise({ redirectTo: '/' });
 			return $httpProvider.responseInterceptors.push('errorHttpInterceptor');
 		}])
 		.run(['$rootScope', '$http', '$location', function ($rootScope, $http, $location) {
+			$rootScope.breadcrum = [{label:'Home', url: '/'}];
+
 			$rootScope.$on('event:loginRequired', function () {
 				window.location = "/login";
 			});
@@ -118,14 +135,7 @@
 					{
 						id: "devices",
 						name: "Devices",
-						url: "#/devices",
-						items: [
-							{
-								id: 'all',
-								name: 'All',
-								url: "#/devices"
-							}
-						]
+						url: "#/devices"
 					}
 				];
 

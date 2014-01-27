@@ -9,11 +9,12 @@
     <section id="device-informations">
 
         <ul class="tab">
-            <li ng-click="tabSelected = 'general'" ng-class="{selected: tabSelected == 'general'}">General</li><!--
-            --><li ng-click="tabSelected = 'services'" ng-class="{selected: tabSelected == 'services'}">Services</li>
+            <li link="/devices/130/general" ng-class="{selected: tabSelected == 'general'}">General</li><!--
+            --><li link="/devices/130/services" ng-class="{selected: tabSelected == 'services'}">Services</li>
         </ul>
 
-        <div id="general-data" ng-show="tabSelected == 'general'">
+        <div id="tab-general" ng-show="tabSelected == 'general'">
+
             <h1>General Informations</h1>
 
             <table class="dataset keyvalue">
@@ -60,6 +61,8 @@
                 </tbody>
             </table>
 
+
+
             <h1>Beacon Informations</h1>
 
             <table class="dataset keyvalue">
@@ -87,28 +90,6 @@
                 </tbody>
             </table>
 
-        </div>
-
-        <div id="services" ng-show="tabSelected == 'services'">
-            <h1>Services Informations</h1>
-
-            <table class="dataset keyvalue">
-                <thead>
-                <tr>
-                    <th>uuid</th>
-                    <th>name</th>
-                    <th>type</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="service in device.advertisement.services">
-                    <td><a scroll-to='service-{{service.uuid}}'>{{service.uuid}}</a></td>
-                    <td>{{service.name}}</td>
-                    <td>{{service.type}}</td>
-                </tr>
-                </tbody>
-            </table>
-
             <h1>Service UUIDs</h1>
 
             <table class="dataset keyvalue">
@@ -118,6 +99,125 @@
                 </tr>
                 </tbody>
             </table>
+
+        </div>
+
+        <div id="tab-services" ng-show="tabSelected == 'services'">
+
+            <h1>Services Informations</h1>
+
+            <section id="tab-service-list">
+
+                <table class="dataset list">
+                    <thead>
+                    <tr>
+                        <th>uuid</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="service in device.advertisement.services" ng-class="{selected: selectedService.uuid == service.uuid}">
+                        <td ng-click="selectService(service)">
+                            <div><a scroll-to='service-{{service.uuid}}'>{{service.uuid}} - {{serviceLabel(service.name)}}</a></div>
+                            <div>{{service.type}}</div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </section>
+
+            <section id="tab-service-details">
+
+                <table class="dataset keyvalue">
+                    <thead>
+                    <tr>
+                        <th>uuid</th>
+                        <th>name</th>
+                        <th>type</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{selectedService.uuid}}</td>
+                        <td>{{selectedService.name}}</td>
+                        <td>{{selectedService.type}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <h2>Characteristics</h2>
+
+                <div id="service-{{selectedService.uuid}}-characteristics" class="service-characteristics">
+                    <table class="dataset keyvalue">
+                        <thead>
+                        <tr>
+                            <th>uuid</th>
+                            <th>name</th>
+                            <th>type</th>
+                            <th>properties</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-click="selectCharacteristic(characteristic)"
+                            ng-repeat="characteristic in selectedService.characteristics"
+                            ng-class="{selected: selectedCharacteristic.uuid == characteristic.uuid}">
+                            <td><a scroll-to='service-{{selectedService.uuid}}-characteristic-{{characteristic.uuid}}'>{{characteristic.uuid}}</a></td>
+                            <td>{{characteristic.name}}</td>
+                            <td>{{characteristic.type}}</td>
+                            <td>
+                                <ul>
+                                    <li ng-repeat="property in characteristic.properties"><a href="">{{property}}</a></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+                    <div id="service-{{selectedService.uuid}}-characteristic-{{selectedCharacteristic.uuid}}">
+                        <h3>Characteristic with uuid: '{{selectedCharacteristic.uuid}}' Informations</h3>
+
+                        <table class="dataset keyvalue">
+                            <thead>
+                            <tr>
+                                <th>uuid</th>
+                                <th>name</th>
+                                <th>type</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{selectedCharacteristic.uuid}}</td>
+                                <td>{{selectedCharacteristic.name}}</td>
+                                <td>{{selectedCharacteristic.type}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <h4>Descriptors</h4>
+
+                        <div id="service-{{selectedService.uuid}}-characteristic-{{selectedCharacteristic.uuid}}-descriptors">
+                            <table class="dataset keyvalue">
+                                <thead>
+                                <tr>
+                                    <th>uuid</th>
+                                    <th>name</th>
+                                    <th>type</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="descriptor in selectedCharacteristic.descriptors">
+                                    <td>{{selectedCharacteristic.uuid}}</td>
+                                    <td>{{selectedCharacteristic.name}}</td>
+                                    <td>{{selectedCharacteristic.type}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
 
         </div>
 

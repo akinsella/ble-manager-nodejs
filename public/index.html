@@ -60,10 +60,10 @@
         </div>
     </div>
     <div>
-        <nav id="submenu">
+        <nav id="breadcrum">
             <ul>
-                <li ng-repeat="subMenu in selectedMenuItem.items">
-                    <a href="{{subMenu.url}}">{{subMenu.name}}</a>
+                <li ng-repeat="breadcrumItem in breadcrum">
+                    <a href="#{{breadcrumItem.url}}">{{breadcrumItem.label}}</a>
                 </li>
             </ul>
         </nav>
