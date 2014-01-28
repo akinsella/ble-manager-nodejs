@@ -9,8 +9,8 @@
     <section id="device-informations">
 
         <ul class="tab">
-            <li link="/devices/130/general" ng-class="{selected: tabSelected == 'general'}">General</li><!--
-            --><li link="/devices/130/services" ng-class="{selected: tabSelected == 'services'}">Services</li>
+            <li link="/devices/{{device.id}}/general" ng-class="{selected: tabSelected == 'general'}">General</li><!--
+            --><li link="/devices/{{device.id}}/services" ng-class="{selected: tabSelected == 'services'}">Services</li>
         </ul>
 
         <div id="tab-general" ng-show="tabSelected == 'general'">
