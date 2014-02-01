@@ -31,6 +31,12 @@
 			            method: 'GET',
 			            url: '/devices/discover'
 		            });
+	            },
+	            readDeviceCharacteristic : function(deviceUuid, characteristicUuid) {
+		            return $http({
+			            method: 'GET',
+			            url: '/devices/:deviceUuid/:characteristicUuid/read'
+		            });
 	            }
 
             }
@@ -82,7 +88,7 @@
 			    console.log("Fetching device with id '" + $scope.deviceId + "' started");
 			    DeviceData.deviceWithId($scope.deviceId)
 				    .success(function(device, status, headers, config) {
-					    console.log("Fetching Ddevice ended");
+					    console.log("Fetching device ended");
 					    $scope.device = device;
 					    console.log("Device", device);
 					    $scope.selectService(device.advertisement.services[0]);
@@ -127,6 +133,35 @@
 					});
 			    }
 		    };
+
+		    $scope.executeCharacteristicProperty = function(device, characteristic, property) {
+			    if (property == 'read') {
+				    DeviceData.readDeviceCharacteristic(device.uuid, characteristic.uuid)
+					    .success(function(readCharacteristicValue, status, headers, config) {
+						    console.log("Fetching device characteristic ended");
+						    $scope.readCharacteristics.addDeviceIfNecessary(device);
+						    $scope.readCharacteristics.devices[device.uuid].addCharacteristicIfNecessary(characteristic);
+						    $scope.readCharacteristics.devices[device.uuid].characteristics[characteristic.uuid] = readCharacteristicValue;
+					    });
+			    }
+		    };
+
+		    $scope.readCharacteristics = {
+			    devices: [],
+			    addDeviceIfNecessary: function(device) {
+			        this.devices[device.uuid] = {
+				        characteristics: [],
+
+				        addCharacteristicIfNecessary: function(characteristic) {
+					        this.characteristics[characteristic.uuid] = {
+						        characteristics: []
+					        }
+				        }
+			        }
+		        }
+		    };
+
+
 
 		    $scope.fetchDevice();
 

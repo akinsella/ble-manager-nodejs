@@ -132,7 +132,6 @@ class DeviceDiscoverySynchronizer extends DeviceSynchronizer
 				.done()
 		, @timeout
 
-
 	processPeripheral: (peripheral, callback) =>
 		console.log("Processing peripheral with UUID #{peripheral.uuid} found")
 		console.log("Connecting to peripheral with UUID #{peripheral.uuid} found")

@@ -183,6 +183,8 @@
                                 <th>uuid</th>
                                 <th>name</th>
                                 <th>type</th>
+                                <th>last value</th>
+                                <th>properties</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -190,6 +192,13 @@
                                 <td>{{selectedCharacteristic.uuid}}</td>
                                 <td>{{selectedCharacteristic.name}}</td>
                                 <td>{{selectedCharacteristic.type}}</td>
+                                <td>{{readCharacteristics.devices[selectedDevice.uuid].characteristics[selectedCharacteristic.uuid].values}}</td>
+                                <td>
+                                    <ul>
+                                        <li ng-repeat="property in selectedCharacteristic.properties"><a href="" ngClick="executeCharacteristicProperty(selectedDevice, selectedCharacteristic, property)">{{property}}</a></li>
+                                    </ul>
+                                </td>
+
                             </tr>
                             </tbody>
                         </table>

@@ -146,6 +146,7 @@ app.get "/devices", security.ensureAuthenticated, device.list
 app.get "/devices/discover", security.ensureAuthenticated, device.discover
 app.get "/devices/:id", security.ensureAuthenticated, device.findById
 app.delete "/devices/:id", security.ensureAuthenticated, device.removeById
+app.get "/devices/:deviceUuid/services/:serviceUuid/characteristics/:characteristicUuid", security.ensureAuthenticated, device.readDeviceServiceCharacteristic
 
 app.post "/clients", security.ensureAuthenticated, client.create
 app.get "/clients", security.ensureAuthenticated, client.list
