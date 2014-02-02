@@ -1,7 +1,6 @@
 start = new Date()
 
-logger = require 'winston'
-
+logger = require './log/logger'
 config = require './conf/config'
 
 if config.devMode

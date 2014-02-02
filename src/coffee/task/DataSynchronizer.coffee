@@ -1,4 +1,4 @@
-logger = require 'winston'
+logger = require '../log/logger'
 
 config = require '../conf/config'
 utils = require '../lib/utils'

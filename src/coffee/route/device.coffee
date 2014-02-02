@@ -1,15 +1,12 @@
 async = require 'async'
-noble = require 'noble'
 Q = require 'q'
-logger = require 'winston'
 _ = require('underscore')._
 
+logger = require '../log/logger'
 utils = require '../lib/utils'
 Device = require '../model/device'
 DeviceDiscoverySynchronizer = require '../task/device/DeviceDiscoverySynchronizer'
-
-noble.on 'stateChange', (state) ->
-	logger.info("BLE state: #{state}")
+BleServive = require '../service/bleService'
 
 list = (req, res) ->
 	Device.find {}, (err, devices) ->
@@ -48,74 +45,23 @@ discover = (req, res) ->
 				device.toObject()
 
 readDeviceServiceCharacteristic = (req, res) ->
-	console.log("Reading device characteristic ...")
+
 	deviceUuid = req.params.deviceUuid
 	serviceUuid = req.params.serviceUuid
 	characteristicUuid = req.params.characteristicUuid
-	peripheralHolder = {};
 
-	noble.startScanning([], false)
+	logger.info("Reading data for characteristic with uuid '#{characteristicUuid}' service with uuid '#{serviceUuid}' to peripheral with uuid: '#{deviceUuid}'")
 
-	deviceCallback = (err, peripheral) ->
-		console.log("Stopping scanning with Noble")
-		if peripheralHolder.peripheral
-			peripheralHolder.peripheral.disconnect()
-
-		noble.stopScanning()
-
+	BleServive.readDeviceServiceCharacteristic deviceUuid, serviceUuid, characteristicUuid, (err, data) ->
 		if err
 			res.send 500, "Server error: #{err.message}"
 		else
-			res.send 200, JSON.stringify(peripheral)
-
-	peripheralProcessingPromise = undefined
-	noble.on 'discover', (peripheral) ->
-		logger.info("Discovered peripheral with uuid: '#{peripheral.uuid}'")
-		if peripheral.uuid != deviceUuid
-			logger.info("Not expected device !")
-		else
-			peripheralProcessingPromise = Q.nfcall(readDeviceServiceCharacteristicInternal, peripheral, serviceUuid, characteristicUuid, peripheralHolder)
-
-	setTimeout () ->
-		if peripheralProcessingPromise
-			peripheralProcessingPromise
-				.then (peripherals) ->
-						deviceCallback(undefined, peripherals)
-				.fail (err) ->
-						deviceCallback(err)
-				.done()
-		else
-			deviceCallback(new Error("No device found"))
-
-	, 2000
-
-readDeviceServiceCharacteristicInternal = (peripheral, serviceUuid, characteristicUuid, dataHolder, peripheralCallback) ->
-
-	peripheral.connect (err) ->
-		logger.info("Connected to peripheral with uuid: '#{peripheral.uuid}'")
-		if err
-			peripheralCallback(err)
-		else
-			dataHolder.peripheral = peripheral
-			peripheral.discoverServices [serviceUuid], (err, services) ->
-				service = _(services).find (service) -> service.uuid == serviceUuid
-				logger.info("Discovered service with uuid '#{service.uuid}' to peripheral with uuid: '#{peripheral.uuid}'")
-				if err || !service
-					peripheralCallback(err)
-				else
-					service.discoverCharacteristics [characteristicUuid], (err, characteristics) ->
-						characteristic = _(characteristics).find (characteristic) -> characteristic.uuid == characteristicUuid
-						logger.info("Discovered characteristic with uuid '#{characteristic.uuid}' service with uuid '#{service.uuid}' to peripheral with uuid: '#{peripheral.uuid}'")
-						if err || !characteristic
-							peripheralCallback(err)
-						else
-							characteristic.read (err, data) ->
-								if err || !data
-									peripheralCallback(err)
-								else
-									logger.info("Read data: '#{data}' for characteristic with uuid '#{characteristic.uuid}' service with uuid '#{service.uuid}' to peripheral with uuid: '#{peripheral.uuid}'")
-									peripheralCallback(undefined, data)
-
+			res.json 200, {
+				deviceUuid: deviceUuid
+				serviceUuid: serviceUuid
+				characteristicUuid: characteristicUuid
+				data: data.toString()
+			}
 
 
 module.exports =

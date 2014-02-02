@@ -1,6 +1,6 @@
-logger = require 'winston'
 cronJob = require('cron').CronJob
 
+logger = require '../log/logger'
 conf = require '../conf/config'
 
 DeviceDiscoverySynchronizer = require './device/DeviceDiscoverySynchronizer'

@@ -1,5 +1,4 @@
-logger = require 'winston'
-
+logger = require '../log/logger'
 utils = require '../lib/utils'
 apns = require "../lib/apns"
 

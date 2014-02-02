@@ -1,5 +1,5 @@
-logger = require 'winston'
 
+logger = require '../log/logger'
 utils = require '../lib/utils'
 db = require "../db"
 User = require "../model/user"

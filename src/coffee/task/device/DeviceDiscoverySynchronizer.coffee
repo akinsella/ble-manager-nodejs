@@ -1,10 +1,10 @@
-logger = require 'winston'
 _ = require('underscore')._
 util = require 'util'
 noble = require 'noble'
 Q = require 'q'
 async = require 'async'
 
+logger = require '../../log/logger'
 utils = require '../../lib/utils'
 Device = require "../../model/device"
 DeviceSynchronizer = require './DeviceSynchronizer'
@@ -13,9 +13,6 @@ EXPECTED_MANUFACTURER_DATA_LENGTH = 25;
 APPLE_COMPANY_IDENTIFIER = 0x004c; # https://www.bluetooth.org/en-us/specification/assigned-numbers/company-identifiers
 IBEACON_TYPE = 0x02;
 EXPECTED_IBEACON_DATA_LENGTH = 0x15;
-
-noble.on 'stateChange', (state) ->
-	logger.info("BLE state: #{state}")
 
 scanning = false
 

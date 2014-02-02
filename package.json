@@ -59,7 +59,8 @@
     "q": "*",
     "winston": "0.7.2",
     "noble": "*",
-	"bleacon": "*"
+	"bleacon": "*",
+	"mkdirp": "*"
   },
   "devDependencies": {
     "should": "2.1.1",

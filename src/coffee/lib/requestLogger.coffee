@@ -1,4 +1,4 @@
-logger = require 'winston'
+logger = require  '../log/logger'
 
 module.exports = () ->
 	return (req, res, next) ->

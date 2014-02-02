@@ -1,7 +1,7 @@
 mongoose = require 'mongoose'
 pureautoinc  = require 'mongoose-pureautoinc'
-logger = require 'winston'
 
+logger = require  '../log/logger'
 config = require '../conf/config'
 
 options =

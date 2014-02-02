@@ -1,7 +1,7 @@
 _ = require('underscore')._
-logger = require 'winston'
 ApnAgent = require 'apnagent'
 
+logger = require '../log/logger'
 config = require '../conf/config'
 Device = require '../model/device'
 Notification = require '../model/notification'

@@ -32,10 +32,10 @@
 			            url: '/devices/discover'
 		            });
 	            },
-	            readDeviceCharacteristic : function(deviceUuid, characteristicUuid) {
+	            readDeviceCharacteristic : function(deviceUuid, serviceUuid, characteristicUuid) {
 		            return $http({
 			            method: 'GET',
-			            url: '/devices/:deviceUuid/:characteristicUuid/read'
+			            url: '/devices/' + deviceUuid + '/services/' + serviceUuid + '/characteristics/' + characteristicUuid
 		            });
 	            }
 
@@ -134,22 +134,22 @@
 			    }
 		    };
 
-		    $scope.executeCharacteristicProperty = function(device, characteristic, property) {
+		    $scope.executeCharacteristicProperty = function(device, service, characteristic, property) {
 			    if (property == 'read') {
-				    DeviceData.readDeviceCharacteristic(device.uuid, characteristic.uuid)
+				    DeviceData.readDeviceCharacteristic(device.uuid, service.uuid, characteristic.uuid)
 					    .success(function(readCharacteristicValue, status, headers, config) {
 						    console.log("Fetching device characteristic ended");
-						    $scope.readCharacteristics.addDeviceIfNecessary(device);
-						    $scope.readCharacteristics.devices[device.uuid].addCharacteristicIfNecessary(characteristic);
-						    $scope.readCharacteristics.devices[device.uuid].characteristics[characteristic.uuid] = readCharacteristicValue;
+						    $scope.readCharacteristics.addServiceIfNecessary(service);
+						    $scope.readCharacteristics.services[service.uuid].addCharacteristicIfNecessary(characteristic);
+						    $scope.readCharacteristics.services[service.uuid].characteristics[characteristic.uuid] = readCharacteristicValue;
 					    });
 			    }
 		    };
 
 		    $scope.readCharacteristics = {
-			    devices: [],
-			    addDeviceIfNecessary: function(device) {
-			        this.devices[device.uuid] = {
+			    services: [],
+			    addServiceIfNecessary: function(service) {
+			        this.services[service.uuid] = {
 				        characteristics: [],
 
 				        addCharacteristicIfNecessary: function(characteristic) {

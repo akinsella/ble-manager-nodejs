@@ -1,7 +1,7 @@
-logger = require 'winston'
 async = require 'async'
 request = require 'request'
 
+logger = require '../../log/logger'
 config = require '../../conf/config'
 utils = require '../../lib/utils'
 DataSynchronizer = require '../DataSynchronizer'

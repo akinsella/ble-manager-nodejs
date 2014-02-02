@@ -1,8 +1,9 @@
-logger = require 'winston'
 request = require 'request'
 moment = require 'moment'
 _ = require('underscore')._
 HtmlEntities = require 'html-entities'
+
+logger = require '../log/logger'
 
 cache = require './cache'
 
