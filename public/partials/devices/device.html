@@ -154,6 +154,7 @@
                             <th>uuid</th>
                             <th>name</th>
                             <th>type</th>
+                            <th>last value</th>
                             <th>properties</th>
                         </tr>
                         </thead>
@@ -164,9 +165,12 @@
                             <td><a scroll-to='service-{{selectedService.uuid}}-characteristic-{{characteristic.uuid}}'>{{characteristic.uuid}}</a></td>
                             <td>{{characteristic.name}}</td>
                             <td>{{characteristic.type}}</td>
+                            <td>{{read.devices[device.uuid].services[selectedService.uuid].characteristics[characteristic.uuid]}}</td>
                             <td>
                                 <ul>
-                                    <li ng-repeat="property in characteristic.properties"><a href="">{{property}}</a></li>
+                                    <li ng-repeat="property in characteristic.properties">
+                                        <a href="" ng-click="executeCharacteristicProperty(device, selectedService, characteristic, property)">{{property}}</a>
+                                    </li>
                                 </ul>
                             </td>
                         </tr>
@@ -195,7 +199,9 @@
                                 <td>{{read.devices[device.uuid].services[selectedService.uuid].characteristics[selectedCharacteristic.uuid]}}</td>
                                 <td>
                                     <ul>
-                                        <li ng-repeat="property in selectedCharacteristic.properties"><a href="" ng-click="executeCharacteristicProperty(device, selectedService, selectedCharacteristic, property)">{{property}}</a></li>
+                                        <li ng-repeat="selectedCharacteristicProperty in selectedCharacteristic.properties">
+                                            <a href="" ng-click="readCharacteristic(device, selectedService, selectedCharacteristic, selectedCharacteristicProperty)">{{selectedCharacteristicProperty}}</a>
+                                        </li>
                                     </ul>
                                 </td>
 

@@ -20,13 +20,13 @@ loggerConfig =
 		console:
 			level: 'debug'
 			colorize: true
-			pattern: "YYYY-MM-SS HH:MM:SS.sss"
+			timestamp: "YYYY-MM-DD HH:mm:ss.sss"
 		file:
 			dir: "#{__dirname}/logs"
 			filename: "logs.log"
 			level: 'debug'
 			json: false
-			pattern: "YYYY-MM-SS HH:MM:SS.sss"
+			timestamp: "YYYY-MM-DD HH:mm:ss.sss"
 			maxsize: 1024 * 1024 * 10
 
 winston.addColors(loggerConfig.colors)

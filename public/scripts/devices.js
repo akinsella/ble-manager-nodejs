@@ -32,7 +32,7 @@
 			            url: '/devices/discover'
 		            });
 	            },
-	            readDeviceCharacteristic : function(deviceUuid, serviceUuid, characteristicUuid) {
+	            read : function(deviceUuid, serviceUuid, characteristicUuid) {
 		            return $http({
 			            method: 'GET',
 			            url: '/devices/' + deviceUuid + '/services/' + serviceUuid + '/characteristics/' + characteristicUuid
@@ -136,24 +136,27 @@
 
 		    $scope.executeCharacteristicProperty = function(device, service, characteristic, property) {
 			    if (property == 'read') {
-				    DeviceData.readDeviceCharacteristic(device.uuid, service.uuid, characteristic.uuid)
-					    .success(function(readCharacteristicValue, status, headers, config) {
-						    console.log("Fetching device characteristic ended");
-						    $scope.readCharacteristics.addServiceIfNecessary(service);
-						    $scope.readCharacteristics.services[service.uuid].addCharacteristicIfNecessary(characteristic);
-						    $scope.readCharacteristics.services[service.uuid].characteristics[characteristic.uuid] = readCharacteristicValue;
-					    });
+				    $scope.readCharacteristic(device, service, characteristic);
 			    }
 		    };
 
-		    $scope.readCharacteristics = {
-			    services: [],
-			    addServiceIfNecessary: function(service) {
-			        this.services[service.uuid] = {
-				        characteristics: [],
+		    $scope.readCharacteristic = function(device, service, characteristic) {
+			    DeviceData.read(device.uuid, service.uuid, characteristic.uuid)
+				    .success(function(response, status, headers, config) {
+					    console.log("Fetching device characteristic ended");
+					    $scope.read.putDevice(device);
+					    $scope.read.devices[device.uuid].putService(service);
+					    $scope.read.devices[device.uuid].services[service.uuid].characteristics[characteristic.uuid] = response.data;
+				    });
+		    };
 
-				        addCharacteristicIfNecessary: function(characteristic) {
-					        this.characteristics[characteristic.uuid] = {
+		    $scope.read = {
+			    devices: [],
+			    putDevice: function(service) {
+			        this.devices[service.uuid] = this.devices[service.uuid] || {
+				        services: [],
+				        putService: function(service) {
+					        this.services[service.uuid] = this.services[service.uuid] || {
 						        characteristics: []
 					        }
 				        }
