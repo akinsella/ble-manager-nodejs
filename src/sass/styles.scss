@@ -286,15 +286,15 @@ section#content {
     }
 
     h2 {
-      padding-top: 20px;
+      padding-top: 30px;
     }
 
     h3 {
-      padding-top: 10px;
+      padding-top: 30px;
     }
 
     h4 {
-      padding-top: 5px;
+      padding-top: 20px;
     }
 
   }
@@ -792,6 +792,13 @@ section#tab-service-details {
               content: '';
             }
           }
+        }
+      }
+
+      ul.list {
+        display: block;
+        li {
+          display: block;
         }
       }
     }

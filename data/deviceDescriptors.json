@@ -1,0 +1,17 @@
+[{
+	"uuid": "3ab7f99a74ff4f4ba26a5204603f075a",
+	"services": [{
+		"uuid": "f000aa0004514000b000000000000000",
+		"name": "Temperature",
+		"characteristics": [
+			{
+				"uuid": "f000aa0104514000b000000000000000",
+				"name": "Value"
+			},
+			{
+				"uuid": "f000aa0204514000b000000000000000",
+				"name": "Activation"
+			}
+		]
+	}]
+}]

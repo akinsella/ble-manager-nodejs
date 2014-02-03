@@ -32,6 +32,12 @@
 			            url: '/devices/discover'
 		            });
 	            },
+	            fetchDeviceDescriptorByDevice:function(deviceUuid) {
+		            return $http({
+			            method: 'GET',
+			            url: '/devices/' + deviceUuid + '/descriptor'
+		            });
+	            },
 	            read : function(deviceUuid, serviceUuid, characteristicUuid) {
 		            return $http({
 			            method: 'GET',
@@ -93,6 +99,7 @@
 					    console.log("Device", device);
 					    $scope.selectService(device.advertisement.services[0]);
 					    $scope.computeBreadcrum();
+					    $scope.deviceDescriptorByDevice(device)
 				    });
 		    };
 
@@ -164,7 +171,53 @@
 		        }
 		    };
 
+		    $scope.deviceDescriptors = {};
 
+		    $scope.deviceDescriptorByDevice = function(device) {
+			    console.log("Fetching device descriptor started");
+			    if (!$scope.deviceDescriptors[device.uuid]) {
+				    DeviceData.fetchDeviceDescriptorByDevice(device.uuid).success(function(data, status, headers, config) {
+					    console.log("Fetching device descriptor ended");
+					    $scope.deviceDescriptors[device.uuid] = data;
+					    console.log("Device Descriptor: '", data, "'");
+				    });
+			    }
+		    };
+
+		    $scope.deviceDescriptorName = function(deviceUuid, serviceUuid) {
+			    if ($scope.deviceDescriptors == undefined) {
+				    return $scope.deviceDescriptors;
+			    }
+
+			    var deviceDescriptor =  $scope.deviceDescriptors[deviceUuid];
+			    if (deviceDescriptor == undefined) {
+				    return "service undefined";
+			    }
+
+			    var services = deviceDescriptor.services;
+			    if (services == undefined) {
+				    return "";
+			    }
+
+			    var service = _(services).find(function(service) {
+				    return service.uuid == serviceUuid;
+			    });
+
+			    if (service == undefined) {
+				    return "";
+			    }
+
+			    return service.name;
+		    };
+
+		    $scope.serviceLabel = function(service) {
+			    if (service !== undefined) {
+				    return service.name ? service.uuid + " - " + service.name : service.uuid;
+			    }
+			    else {
+				    return undefined;
+			    }
+		    };
 
 		    $scope.fetchDevice();
 

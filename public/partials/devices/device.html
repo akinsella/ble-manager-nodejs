@@ -15,90 +15,96 @@
 
         <div id="tab-general" ng-show="tabSelected == 'general'">
 
-            <h1>General Informations</h1>
+            <div>
+                <h1>General Informations</h1>
 
-            <table class="dataset keyvalue">
-                <tbody>
-                <tr>
-                    <td>Identifier</td>
-                    <td>{{device.id}}</td>
-                </tr>
-                <tr>
-                    <td>UUID</td>
-                    <td>{{device.uuid}}</td>
-                </tr>
-                <tr>
-                    <td>RSSI</td>
-                    <td>{{device.rssi}}</td>
-                </tr>
-                <tr>
-                    <td>Created At</td>
-                    <td>{{reformatDate(device.createAt)}}</td>
-                </tr>
-                </tbody>
-            </table>
+                <table class="dataset keyvalue">
+                    <tbody>
+                    <tr>
+                        <td>Identifier</td>
+                        <td>{{device.id}}</td>
+                    </tr>
+                    <tr>
+                        <td>UUID</td>
+                        <td>{{device.uuid}}</td>
+                    </tr>
+                    <tr>
+                        <td>RSSI</td>
+                        <td>{{device.rssi}}</td>
+                    </tr>
+                    <tr>
+                        <td>Created At</td>
+                        <td>{{reformatDate(device.createAt)}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
-            <h1>Advertisement Informations</h1>
+            <div>
+                <h1>Advertisement Informations</h1>
 
-            <table class="dataset keyvalue">
-                <tbody>
-                <tr>
-                    <td>Local name</td>
-                    <td>{{device.advertisement.localName}}</td>
-                </tr>
-                <tr>
-                    <td>Tx Power Level</td>
-                    <td>{{device.advertisement.txPowerLevel}}</td>
-                </tr>
-                <tr>
-                    <td>Manufacturer Data</td>
-                    <td>{{device.advertisement.manufacturerData}}</td>
-                </tr>
-                <tr>
-                    <td>Service Data</td>
-                    <td>{{device.advertisement.serviceData}}</td>
-                </tr>
-                </tbody>
-            </table>
+                <table class="dataset keyvalue">
+                    <tbody>
+                    <tr>
+                        <td>Local name</td>
+                        <td>{{device.advertisement.localName}}</td>
+                    </tr>
+                    <tr>
+                        <td>Tx Power Level</td>
+                        <td>{{device.advertisement.txPowerLevel}}</td>
+                    </tr>
+                    <tr>
+                        <td>Manufacturer Data</td>
+                        <td>{{device.advertisement.manufacturerData}}</td>
+                    </tr>
+                    <tr>
+                        <td>Service Data</td>
+                        <td>{{device.advertisement.serviceData}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
+            <div>
+                <h1>Beacon Informations</h1>
 
+                <table class="dataset keyvalue">
+                    <tbody>
+                    <tr>
+                        <td>Major</td>
+                        <td>{{device.beaconData.major}}</td>
+                    </tr>
+                    <tr>
+                        <td>Minor</td>
+                        <td>{{device.beaconData.major}}</td>
+                    </tr>
+                    <tr>
+                        <td>Measured Power</td>
+                        <td>{{device.beaconData.measuredPower}}</td>
+                    </tr>
+                    <tr>
+                        <td>Accuracy</td>
+                        <td>{{device.beaconData.accuracy}}</td>
+                    </tr>
+                    <tr>
+                        <td>Proximity</td>
+                        <td>{{device.beaconData.proximity}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
-            <h1>Beacon Informations</h1>
+            <div ng-show="{{device.advertisement.serviceUuids.length > 0}}">
+                <h1>Service UUIDs</h1>
 
-            <table class="dataset keyvalue">
-                <tbody>
-                <tr>
-                    <td>Major</td>
-                    <td>{{device.beaconData.major}}</td>
-                </tr>
-                <tr>
-                    <td>Minor</td>
-                    <td>{{device.beaconData.major}}</td>
-                </tr>
-                <tr>
-                    <td>Measured Power</td>
-                    <td>{{device.beaconData.measuredPower}}</td>
-                </tr>
-                <tr>
-                    <td>Accuracy</td>
-                    <td>{{device.beaconData.accuracy}}</td>
-                </tr>
-                <tr>
-                    <td>Proximity</td>
-                    <td>{{device.beaconData.proximity}}</td>
-                </tr>
-                </tbody>
-            </table>
-
-            <h1>Service UUIDs</h1>
-
-            <table class="dataset keyvalue">
-                <tbody>
-                <tr ng-repeat="serviceUuid in device.advertisement.serviceUuids">
-                    <td>{{serviceUuid}}</td>
-                </tr>
-                </tbody>
-            </table>
+                <table class="dataset keyvalue">
+                    <tbody>
+                    <tr ng-repeat="serviceUuid in device.advertisement.serviceUuids">
+                        <td>{{serviceUuid}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
 
@@ -117,8 +123,10 @@
                     <tbody>
                     <tr ng-repeat="service in device.advertisement.services" ng-class="{selected: selectedService.uuid == service.uuid}">
                         <td ng-click="selectService(service)">
-                            <div><a scroll-to='service-{{service.uuid}}'>{{service.uuid}} - {{serviceLabel(service.name)}}</a></div>
-                            <div>{{service.type}}</div>
+                            <ul>
+                                <li><a scroll-to="service-{{service.uuid}}">{{serviceLabel(service)}}</a></li>
+                                <li style="font-weight: normal; font-size: 0.8em;">{{service.type}}</li>
+                            </ul>
                         </td>
                     </tr>
                     </tbody>
@@ -127,23 +135,12 @@
             </section>
 
             <section id="tab-service-details">
-
-                <table class="dataset keyvalue">
-                    <thead>
-                    <tr>
-                        <th>uuid</th>
-                        <th>name</th>
-                        <th>type</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>{{selectedService.uuid}}</td>
-                        <td>{{selectedService.name}}</td>
-                        <td>{{selectedService.type}}</td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div style="background: #ddd; padding: 8px 10px 5px 10px; border-bottom: 2px #aaa solid; font-size: 1.2em;">
+                    <ul>
+                        <li><a scroll-to="service-{{service.uuid}}" style="font-weight: bold;">{{serviceLabel(selectedService)}}</a></li>
+                        <li style="font-weight: normal; font-size: 0.8em;">{{selectedService.type}}</li>
+                    </ul>
+                </div>
 
                 <h2>Characteristics</h2>
 
@@ -151,9 +148,7 @@
                     <table class="dataset keyvalue">
                         <thead>
                         <tr>
-                            <th>uuid</th>
-                            <th>name</th>
-                            <th>type</th>
+                            <th>uuid - name (type)</th>
                             <th>last value</th>
                             <th>properties</th>
                         </tr>
@@ -162,10 +157,19 @@
                         <tr ng-click="selectCharacteristic(characteristic)"
                             ng-repeat="characteristic in selectedService.characteristics"
                             ng-class="{selected: selectedCharacteristic.uuid == characteristic.uuid}">
-                            <td><a scroll-to='service-{{selectedService.uuid}}-characteristic-{{characteristic.uuid}}'>{{characteristic.uuid}}</a></td>
-                            <td>{{characteristic.name}}</td>
-                            <td>{{characteristic.type}}</td>
-                            <td>{{read.devices[device.uuid].services[selectedService.uuid].characteristics[characteristic.uuid]}}</td>
+                            <td style="text-align: left;">
+                                <ul>
+                                    <li><a scroll-to="service-{{selectedService.uuid}}-characteristic-{{characteristic.uuid}}">{{characteristic.uuid}}</a> - {{characteristic.name}}</li>
+                                    <li style="font-weight: normal; font-size: 0.8em;">{{characteristic.type}}</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul class="list">
+                                    <li>String: {{read.devices[device.uuid].services[selectedService.uuid].characteristics[characteristic.uuid].string}}</li>
+                                    <li>Hexa: {{read.devices[device.uuid].services[selectedService.uuid].characteristics[characteristic.uuid].hexa}}</li>
+                                    <li>Array: {{read.devices[device.uuid].services[selectedService.uuid].characteristics[characteristic.uuid].array}}</li>
+                                </ul>
+                            </td>
                             <td>
                                 <ul>
                                     <li ng-repeat="property in characteristic.properties">
@@ -179,37 +183,8 @@
 
 
                     <div id="service-{{selectedService.uuid}}-characteristic-{{selectedCharacteristic.uuid}}">
-                        <h3>Characteristic with uuid: '{{selectedCharacteristic.uuid}}' Informations</h3>
 
-                        <table class="dataset keyvalue">
-                            <thead>
-                            <tr>
-                                <th>uuid</th>
-                                <th>name</th>
-                                <th>type</th>
-                                <th>last value</th>
-                                <th>properties</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{selectedCharacteristic.uuid}}</td>
-                                <td>{{selectedCharacteristic.name}}</td>
-                                <td>{{selectedCharacteristic.type}}</td>
-                                <td>{{read.devices[device.uuid].services[selectedService.uuid].characteristics[selectedCharacteristic.uuid]}}</td>
-                                <td>
-                                    <ul>
-                                        <li ng-repeat="selectedCharacteristicProperty in selectedCharacteristic.properties">
-                                            <a href="" ng-click="readCharacteristic(device, selectedService, selectedCharacteristic, selectedCharacteristicProperty)">{{selectedCharacteristicProperty}}</a>
-                                        </li>
-                                    </ul>
-                                </td>
-
-                            </tr>
-                            </tbody>
-                        </table>
-
-                        <h4>Descriptors</h4>
+                        <h3>Descriptors</h3>
 
                         <div id="service-{{selectedService.uuid}}-characteristic-{{selectedCharacteristic.uuid}}-descriptors">
                             <table class="dataset keyvalue">

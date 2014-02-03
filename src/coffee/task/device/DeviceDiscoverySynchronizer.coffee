@@ -116,15 +116,18 @@ class DeviceDiscoverySynchronizer extends DeviceSynchronizer
 
 	discoverPeripherals: (callback) =>
 		peripherals = []
-		noble.on 'discover', (peripheral) =>
+		listener = (peripheral) =>
 			console.log("Discovered peripheral with UUID #{peripheral.uuid} found")
 			peripherals.push Q.nfcall(@processPeripheral, peripheral)
+		noble.on 'discover', listener
 
 		setTimeout () ->
 			Q.all(peripherals)
 				.then (peripherals) ->
+					noble.removeListener 'discover', listener
 					callback(undefined, peripherals)
 				.fail (err) ->
+					noble.removeListener 'discover', listener
 					callback(err)
 				.done()
 		, @timeout

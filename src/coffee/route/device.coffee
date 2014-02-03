@@ -5,6 +5,7 @@ _ = require('underscore')._
 logger = require '../log/logger'
 utils = require '../lib/utils'
 Device = require '../model/device'
+DeviceDescriptor = require '../model/deviceDescriptor'
 DeviceDiscoverySynchronizer = require '../task/device/DeviceDiscoverySynchronizer'
 BleServive = require '../service/bleService'
 
@@ -60,9 +61,20 @@ readDeviceServiceCharacteristic = (req, res) ->
 				deviceUuid: deviceUuid
 				serviceUuid: serviceUuid
 				characteristicUuid: characteristicUuid
-				data: data.toString()
+				data:
+					string: data.toString()
+					hexa: data.toString('hex')
+					array: JSON.stringify(data)
 			}
 
+deviceDescriptorByDeviceUuid = (req, res) ->
+	DeviceDescriptor.findOne { uuid: req.params.deviceUuid }, (err, deviceDescriptor) ->
+		if err
+			res.send 500, "Could not get device descriptors for uuid: #{req.params.deviceUuid}"
+		else if !deviceDescriptor
+			res.send 404, "Not Found"
+		else
+			res.send 200, deviceDescriptor.toObject()
 
 module.exports =
 	list : list
@@ -70,3 +82,4 @@ module.exports =
 	removeById : removeById
 	discover: discover
 	readDeviceServiceCharacteristic: readDeviceServiceCharacteristic
+	deviceDescriptorByDeviceUuid: deviceDescriptorByDeviceUuid
