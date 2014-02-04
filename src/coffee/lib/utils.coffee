@@ -1,6 +1,7 @@
 request = require 'request'
 moment = require 'moment'
 _ = require('underscore')._
+Q = require 'q'
 HtmlEntities = require 'html-entities'
 
 logger = require '../log/logger'
@@ -259,6 +260,14 @@ htmlToPlainText = (html) ->
 	content = html5Entities.decode(content)
 	content = content.trim()
 
+doWithTimeout = (promise, timeout, callback) ->
+	Q.timeout(promise, timeout)
+	.then (peripherals) ->
+			callback(undefined, peripherals)
+	.fail (err) ->
+			callback(err)
+	.done()
+
 module.exports =
 	getData: getData
 	responseData: responseData
@@ -275,3 +284,4 @@ module.exports =
 	isSame: isSame
 	isNotSame: isNotSame
 	htmlToPlainText: htmlToPlainText
+	doWithTimeout: doWithTimeout

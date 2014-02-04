@@ -124,7 +124,7 @@
                     <tr ng-repeat="service in device.advertisement.services" ng-class="{selected: selectedService.uuid == service.uuid}">
                         <td ng-click="selectService(service)">
                             <ul>
-                                <li><a scroll-to="service-{{service.uuid}}">{{serviceLabel(service)}}</a></li>
+                                <li><a scroll-to="service-{{service.uuid}}">{{serviceLabel(device, service)}}</a></li>
                                 <li style="font-weight: normal; font-size: 0.8em;">{{service.type}}</li>
                             </ul>
                         </td>
@@ -137,7 +137,7 @@
             <section id="tab-service-details">
                 <div style="background: #ddd; padding: 8px 10px 5px 10px; border-bottom: 2px #aaa solid; font-size: 1.2em;">
                     <ul>
-                        <li><a scroll-to="service-{{service.uuid}}" style="font-weight: bold;">{{serviceLabel(selectedService)}}</a></li>
+                        <li><a scroll-to="service-{{service.uuid}}" style="font-weight: bold;">{{serviceLabel(device, selectedService)}}</a></li>
                         <li style="font-weight: normal; font-size: 0.8em;">{{selectedService.type}}</li>
                     </ul>
                 </div>

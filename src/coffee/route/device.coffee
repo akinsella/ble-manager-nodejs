@@ -7,7 +7,7 @@ utils = require '../lib/utils'
 Device = require '../model/device'
 DeviceDescriptor = require '../model/deviceDescriptor'
 DeviceDiscoverySynchronizer = require '../task/device/DeviceDiscoverySynchronizer'
-BleServive = require '../service/bleService'
+BleServive = require '../service/bluetooth/ReadCharacteristicService'
 
 list = (req, res) ->
 	Device.find {}, (err, devices) ->

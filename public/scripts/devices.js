@@ -184,35 +184,36 @@
 			    }
 		    };
 
-		    $scope.deviceDescriptorName = function(deviceUuid, serviceUuid) {
-			    if ($scope.deviceDescriptors == undefined) {
+		    $scope.serviceNameUsingDeviceDescriptor = function(deviceUuid, serviceUuid) {
+			    if (!$scope.deviceDescriptors) {
 				    return $scope.deviceDescriptors;
 			    }
 
-			    var deviceDescriptor =  $scope.deviceDescriptors[deviceUuid];
-			    if (deviceDescriptor == undefined) {
-				    return "service undefined";
+			    var deviceDescriptor = $scope.deviceDescriptors[deviceUuid];
+			    if (!deviceDescriptor) {
+				    return undefined;
 			    }
 
 			    var services = deviceDescriptor.services;
-			    if (services == undefined) {
-				    return "";
+			    if (!services) {
+				    return undefined;
 			    }
 
 			    var service = _(services).find(function(service) {
 				    return service.uuid == serviceUuid;
 			    });
 
-			    if (service == undefined) {
-				    return "";
+			    if (!service) {
+				    return undefined;
 			    }
 
 			    return service.name;
 		    };
 
-		    $scope.serviceLabel = function(service) {
-			    if (service !== undefined) {
-				    return service.name ? service.uuid + " - " + service.name : service.uuid;
+		    $scope.serviceLabel = function(device, service) {
+			    if (service) {
+				    var serviceName = service.name != undefined ? service.name : $scope.serviceNameUsingDeviceDescriptor(device.uuid, service.uuid);
+				    return serviceName ? service.uuid + " - " + serviceName : service.uuid;
 			    }
 			    else {
 				    return undefined;
