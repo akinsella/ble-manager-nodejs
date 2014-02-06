@@ -5,14 +5,14 @@ _ = require('underscore')._
 
 logger = require '../../log/logger'
 DiscoveryService = require './DiscoveryService'
-DeviceQueryService = require './DeviceQueryService'
+DeviceQueryExecutor = require './DeviceQueryExecutor'
 
-readDeviceServiceCharacteristic = (deviceUuid, serviceUuid, characteristicUuid, callback) ->
+readDeviceServiceCharacteristic = (deviceUuid, serviceUuid, characteristicUuid, timeout, callback) ->
 	logger.info("Reading device characteristic ...")
 
-	DiscoveryService.discoverDevice deviceUuid, 2000, (err, device) ->
+	DiscoveryService.discoverDevice deviceUuid, timeout, (err, device) ->
 		promise = Q.fncall(readDeviceServiceCharacteristicPromise, device, serviceUuid, characteristicUuid)
-		DeviceQueryService.executeQuery device, promise, 2000, callback
+		DeviceQueryExecutor.executeQuery device, promise, timeout, callback
 
 readDeviceServiceCharacteristicPromise = (device, serviceUuid, characteristicUuid, callback) ->
 	device.discoverServices [serviceUuid], (err, services) ->

@@ -262,8 +262,8 @@ htmlToPlainText = (html) ->
 
 doWithTimeout = (promise, timeout, callback) ->
 	Q.timeout(promise, timeout)
-	.then (peripherals) ->
-			callback(undefined, peripherals)
+	.then (data) ->
+			callback(undefined, data)
 	.fail (err) ->
 			callback(err)
 	.done()

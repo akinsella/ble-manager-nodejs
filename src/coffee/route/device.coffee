@@ -37,7 +37,7 @@ removeById = (req, res) ->
 
 discover = (req, res) ->
 	console.log("Discovering devices ...")
-	synchronizer = new DeviceDiscoverySynchronizer(2 * 1000)
+	synchronizer = new DeviceDiscoverySynchronizer(5 * 1000)
 	synchronizer.synchronize (err, devices) ->
 		if err
 			res.send 500, "Server error: #{err.message}"
@@ -50,10 +50,11 @@ readDeviceServiceCharacteristic = (req, res) ->
 	deviceUuid = req.params.deviceUuid
 	serviceUuid = req.params.serviceUuid
 	characteristicUuid = req.params.characteristicUuid
+	timeout = req.query.timeout or 2000
 
 	logger.info("Reading data for characteristic with uuid '#{characteristicUuid}' service with uuid '#{serviceUuid}' to peripheral with uuid: '#{deviceUuid}'")
 
-	BleServive.readDeviceServiceCharacteristic deviceUuid, serviceUuid, characteristicUuid, (err, data) ->
+	BleServive.readDeviceServiceCharacteristic deviceUuid, serviceUuid, characteristicUuid, timeout, (err, data) ->
 		if err
 			res.send 500, "Server error: #{err.message}"
 		else

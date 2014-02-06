@@ -24,7 +24,7 @@ scanningTaskProcessor = (task, callback) ->
 		console.log("Stopping scanning with Noble")
 		noble.stopScanning()
 		noble.removeListener 'discover', listener
-		console.log("Stopping scanning with Noble")
+		console.log("Finished processing discovery task with name: '#{task.name}' - data: #{devices}")
 		callback(undefined, devices)
 	, task.timeout
 
@@ -39,20 +39,16 @@ discoverDevice = (deviceUuid, timeout, callback) ->
 		devices: [deviceUuid]
 		timeout: timeout
 
-	taskCallback = (err, data) ->
-		console.log("Finished processing discovery task with name: '#{discoverDeviceTask.name}' - err: #{err}, data: #{data}")
-		callback(err, data)
-
-	executeDiscoveryTask(discoverDeviceTask, taskCallback)
+	executeDiscoveryTask(discoverDeviceTask, callback)
 
 discoverDevices = (timeout, callback) ->
-	discoverDeviceTask =
+	discoverDevicesTask =
 		name: "Discover devices"
 		devices: []
 		timeout: timeout
 
-	executeDiscoveryTask(discoverDeviceTask, callback)
+	executeDiscoveryTask(discoverDevicesTask, callback)
 
-module.export =
+module.exports =
 	discoverDevice: discoverDevice
 	discoverDevices: discoverDevices

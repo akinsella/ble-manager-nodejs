@@ -6,12 +6,18 @@ util = require 'util'
 
 logger = require '../../log/logger'
 ScanningService = require './DiscoveryService'
-DeviceQueryService = require './DeviceQueryService'
+DeviceQueryExecutor = require './DeviceQueryExecutor'
 
 analyze = (device, timeout, callback) ->
 	console.log("Processing device with UUID #{device.uuid}")
-	promise = Q.nfcall(discoverServices, device)
-	DeviceQueryService.executeQuery(device, promise, timeout, callback)
+	fn = (callback) ->
+		discoverServices device, (err, services) ->
+			if err
+				callback(err)
+			else
+				device.services = services
+				callback(undefined, device)
+	DeviceQueryExecutor.executeQuery(device, fn, timeout, callback)
 
 discoverServices = (device, callback) ->
 	device.discoverServices [], (err, services) ->

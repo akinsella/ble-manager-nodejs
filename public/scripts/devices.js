@@ -38,10 +38,10 @@
 			            url: '/devices/' + deviceUuid + '/descriptor'
 		            });
 	            },
-	            read : function(deviceUuid, serviceUuid, characteristicUuid) {
+	            read : function(deviceUuid, serviceUuid, characteristicUuid, timeout) {
 		            return $http({
 			            method: 'GET',
-			            url: '/devices/' + deviceUuid + '/services/' + serviceUuid + '/characteristics/' + characteristicUuid
+			            url: '/devices/' + deviceUuid + '/services/' + serviceUuid + '/characteristics/' + characteristicUuid + '?timeout=2000'
 		            });
 	            }
 
@@ -148,7 +148,7 @@
 		    };
 
 		    $scope.readCharacteristic = function(device, service, characteristic) {
-			    DeviceData.read(device.uuid, service.uuid, characteristic.uuid)
+			    DeviceData.read(device.uuid, service.uuid, characteristic.uuid, 2000)
 				    .success(function(response, status, headers, config) {
 					    console.log("Fetching device characteristic ended");
 					    $scope.read.putDevice(device);

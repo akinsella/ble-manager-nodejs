@@ -1,6 +1,7 @@
 util = require 'util'
 
 logger = require '../../log/logger'
+Device = require '../../model/device'
 
 EXPECTED_MANUFACTURER_DATA_LENGTH = 25;
 APPLE_COMPANY_IDENTIFIER = 0x004c; # https://www.bluetooth.org/en-us/specification/assigned-numbers/company-identifiers

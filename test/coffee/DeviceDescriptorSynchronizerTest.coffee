@@ -25,7 +25,7 @@ describe "Device Descriptor Synchronizer", ->
 	it "it should save Device Descriptors", (done) ->
 		Q.nfcall(DeviceDescriptor.remove.bind(DeviceDescriptor), {})
 			.then () ->
-				synchronizer = new DeviceDescriptorSynchronizer(2 * 1000)
+				synchronizer = new DeviceDescriptorSynchronizer(5 * 1000)
 				Q.nfcall(synchronizer.synchronize)
 			.then (deviceIds) ->
 				console.log("Saved #{deviceIds.length} device descriptors")

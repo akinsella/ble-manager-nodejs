@@ -16,8 +16,8 @@ DiscoveryService = require '../../service/bluetooth/DiscoveryService'
 
 class DeviceDiscoverySynchronizer extends DeviceSynchronizer
 
-	constructor: (@timeout) ->
-		logger.info("Instanciating Device discovery Synchronizer with a timeout of #{timeout}ms")
+	constructor: (@discoveryTimeout, @readCharacteristicsTimeout) ->
+		logger.info("Instanciating Device discovery Synchronizer with a timeout of #{discoveryTimeout}ms")
 		super("Device")
 
 	itemTransformer: (devices) =>
@@ -50,11 +50,11 @@ class DeviceDiscoverySynchronizer extends DeviceSynchronizer
 		Device
 
 	synchronizer: (params, callback) =>
-		DiscoveryService.discoverDevices (err, devices) =>
+		DiscoveryService.discoverDevices @discoveryTimeout, (err, devices) =>
 			async.mapSeries devices, @analyzeDevice, (err, devices) =>
 				callback err, devices
 
-	analyzeDevice: (device, callback) ->
-		DeviceAnalyzer.analyze(device, 10 * 1000, callback)
+	analyzeDevice: (device, callback) =>
+		DeviceAnalyzer.analyze(device, @readCharacteristicsTimeout, callback)
 
 module.exports = DeviceDiscoverySynchronizer

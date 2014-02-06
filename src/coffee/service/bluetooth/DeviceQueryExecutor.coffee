@@ -3,6 +3,7 @@ async = require 'async'
 Q = require 'q'
 _ = require('underscore')._
 
+utils = require '../../lib/utils'
 logger = require '../../log/logger'
 DiscoveryService = require './DiscoveryService'
 
@@ -16,9 +17,10 @@ deviceQueryTaskProcessor = (task, callback) ->
 		if err
 			callback(err)
 		else
-			doWithTimeout task.promise, 2000, (err, data) ->
+			utils.doWithTimeout Q.nfcall(task.fn), task.timeout, (err, data) ->
 				logger.info("Stop connection to device with id: '#{task.device.uuid}'")
 				task.device.disconnect()
+				logger.info("Finished processing queryTask with name: '#{task.name}' - err: #{err}, data: '#{data}'")
 				callback(err, data)
 
 queueForDeviceQuery = (deviceUuid) ->
@@ -26,19 +28,17 @@ queueForDeviceQuery = (deviceUuid) ->
 		deviceQueryQueues[deviceUuid] = async.queue deviceQueryTaskProcessor, 1
 	deviceQueryQueues[deviceUuid]
 
-executeQuery = (device, promise, timeout, callback) ->
-	logger.info("Reading device characteristic ...")
+executeQuery = (device, fn, timeout, callback) ->
+	logger.info("Executing query for device with UUID: '#{device.uuid}' ...")
 
 	queryTask =
 		name: "Querying device with uuid: '#{device.uuid}'"
-		promise: promise
+		fn: fn
+		device: device
 		timeout: timeout
 
-	taskCallback = (err, data) ->
-		console.log("Finished processing queryTask with name: '#{queryTask.name}' - err: #{err}, data: #{data}")
-		callback(err, data)
-
-	queueForDeviceQuery(device.uuid).push(queryTask, taskCallback)
+	deviceQueue = queueForDeviceQuery(device.uuid)
+	deviceQueue.push(queryTask, callback)
 
 module.exports =
 	executeQuery: executeQuery

@@ -27,7 +27,6 @@ class DeviceSynchronizer extends DataSynchronizer
 		callback()
 
 	synchronizeData: (callback) =>
-
 		@synchronizer {}, (error, data) =>
 			logger.info("Transforming response ...")
 			items = @itemTransformer(data)
